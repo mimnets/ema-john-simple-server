@@ -17,15 +17,18 @@ console.log(process.env.DB_USER);
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true  });
 client.connect(err => {
-  const products = client.db("emaJohnStore").collection("products");
+  const productsCollection = client.db("emaJohnStore").collection("products");
   // perform actions on the collection object
 //   client.close(); // Must remove this line
 
-    app.get('/addProduct', (req,res) => {
-        const product = req.body;
-        products.insertOne(product)
+    app.post('/addProduct', (req,res) => {
+        const products = req.body;
+        console.log(product);
+        productsCollection.insertMany(products)
         .then(result => {
-            console.log(result);
+            // console.log(result);
+            res.send(result.insertedCount);
+            console.log(result.insertedCount);
         })
     })
 
